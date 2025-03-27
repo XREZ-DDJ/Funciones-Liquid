@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Looks con Metacampos</title>
+</head>
+<body>
+    {% if product.metafields.custom.completatulook %}
+    <div class="completa-tu-look">
+      <h3>Completa tu look</h3>
+      <div class="productos-relacionados-wrapper">
+        <button class="scroll-btn left" onclick="scrollProductos(-1)">&#10094;</button>
+        <div class="productos-relacionados-container">
+          <div class="productos-relacionados">
+            {% for related_product in product.metafields.custom.completatulook.value %}
+              <div class="producto">
+                <a href="{{ related_product.url }}">
+                  <img src="{{ related_product.featured_image | img_url: 'medium' }}" alt="{{ related_product.title }}">
+                  <p>{{ related_product.title }}</p>
+                </a>
+                <p class="precio">
+                  {% if related_product.compare_at_price > related_product.price %}
+                    <span class="precio-original">{{ related_product.compare_at_price | money }}</span>
+                  {% endif %}
+                  <span class="precio-descuento">{{ related_product.price | money }}</span>
+                </p>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <button class="scroll-btn right" onclick="scrollProductos(1)">&#10095;</button>
+      </div>
+    </div>
+  {% endif %}
+  
+  <style>
+  .completa-tu-look {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .completa-tu-look h3 {
+    text-align: center;
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  /* Contenedor con botones de navegación */
+  .productos-relacionados-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Contenedor de productos */
+  .productos-relacionados-container {
+    overflow: hidden;
+    width: 85%;
+  }
+  
+  .productos-relacionados {
+    display: flex;
+    gap: 15px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  /* Estilos del producto */
+  .producto {
+    text-align: center;
+    border: 0.8px solid #ddd;
+    width: 185px;
+    flex: 0 0 auto;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 10px;
+    height: 300px; /* Altura fija para evitar tamaños desiguales */
+  }
+  
+  /* Ajuste de imágenes */
+  .producto img {
+    width: 100%;
+    height: 215px; /* Altura fija */
+    object-fit: cover; /* Evita distorsión y mantiene el recorte uniforme */
+    border-radius: 10px;
+  }
+  
+  .producto p {
+    font-size: 11px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  /* Precios */
+  .precio {
+    margin-top: 5px;
+    font-size: 12px;
+  }
+  
+  .precio-original {
+    text-decoration: line-through;
+    color: black;
+    margin-right: 5px;
+  }
+  
+  .precio-descuento {
+    color: red;
+    font-weight: bold;
+  }
+  
+  /* Botones de navegación */
+  .scroll-btn {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    z-index: 10;
+  }
+  
+  .scroll-btn.left {
+    left: 5px;
+  }
+  
+  .scroll-btn.right {
+    right: 5px;
+  }
+  
+  .scroll-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  </style>
+  
+  <script>
+  function scrollProductos(direction) {
+    const container = document.querySelector('.productos-relacionados-container');
+    const scrollAmount = 200;
+    container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+  }
+  </script>
+    
+</body>
+</html>

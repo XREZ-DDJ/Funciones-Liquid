@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variante de Genero</title>
+</head>
+<body>
+
+    <div class="producto_genero_relacionado" ><!-- Producto Variante de Género -->
+      
+        {% assign current_title = product.title | downcase %}
+        {% assign target_titles = "" %}
+  
+        {% if current_title contains "hombre" or current_title contains "caballero" %}
+          {% assign target_titles = current_title | replace: "hombre", "mujer" | replace: "caballero", "dama" %}
+          {% assign target_titles = target_titles | append: "," | append: current_title | replace: "hombre", "dama" %}
+          {% assign target_titles = target_titles | append: "," | append: current_title | replace: "caballero", "mujer" %}
+        {% elsif current_title contains "mujer" or current_title contains "dama" %}
+          {% assign target_titles = current_title | replace: "mujer", "hombre" | replace: "dama", "caballero" %}
+          {% assign target_titles = target_titles | append: "," | append: current_title | replace: "mujer", "caballero" %}
+          {% assign target_titles = target_titles | append: "," | append: current_title | replace: "dama", "hombre" %}
+        {% endif %}
+  
+        {% if target_titles != "" %}
+          {% assign target_titles_array = target_titles | split: "," %}
+          {% assign related_product = "" %}
+          {% assign found_related_product = false %}
+  
+          {% paginate collections.todos.products by 185 %}  
+              {% for p in collections.todos.products %}
+                  {% if p.id != product.id %}
+                      {% assign related_product_title = p.title | downcase %}
+  
+                      {% for target in target_titles_array %}
+                          {% if related_product_title contains target %}
+                              {% assign related_product = p %}
+                              {% assign found_related_product = true %}
+                              {% break %}
+                          {% endif %}
+                      {% endfor %}
+  
+                      {% if found_related_product %}
+                          {% break %}
+                      {% endif %}
+                  {% endif %}
+              {% endfor %}
+          {% endpaginate %}
+  
+          {% if found_related_product %}
+              <style>
+                  #related-product-section {
+                      text-align: center;
+                      width: 100%;
+                      margin-top: 20px;
+                  }
+                  #related-product-section h3 {
+                      text-align: center;
+                      font-size: 18px;
+                      font-weight: bold;
+                      color: #333;
+                      margin-bottom: 10px;
+                  }
+                  #related-product-container {
+                      padding: 15px;
+                      border: 0.8px solid #ddd;
+                      width: 250px;
+                      margin-left: auto;
+                      margin-right: auto;
+                      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                      border-radius: 10px;
+                  }
+                  #related-product-container img {
+                      width: 190px;
+                      margin-bottom: 11px;
+                      border-radius: 15px;
+                  }
+                  #related-product-container p {
+                      font-size: 15px;
+                      color: #333;
+                  }
+                  #related-product-container a {
+                      text-decoration: none;
+                  }
+  
+              </style>
+  
+              <div id="related-product-section">
+                  <h3>Los clientes también han comprado su versión</h3>
+                  <div id="related-product-container">
+                      <a href="{{ related_product.url }}">
+                          <img src="{{ related_product.featured_image | img_url: '200x' }}" alt="{{ related_product.title }}">
+                          <p><strong>{{ related_product.title }}</strong></p>
+                          
+                          {% if related_product.compare_at_price > related_product.price %}
+                              <p style = "color:#ff0000"  class="product-price">
+                                  {{ related_product.price | money }}
+                                  <span style ="text-decoration: line-through; color:#333" class="compare-price">{{ related_product.compare_at_price | money }}</span>
+                              </p>
+                          {% else %}
+                              <p style = "color:#ff0000">{{ related_product.price | money }}</p>
+                          {% endif %}
+                      </a>
+                  </div>
+              </div>
+          {% endif %}
+        {% endif %}
+         
+           
+      </div>  <!-- div Producto Variante de Género -->
+    
+</body>
+</html>

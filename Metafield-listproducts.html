@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mostrar Metacampos de lista de productos</title>
+</head>
+<body>
+    {% if product.metafields.custom.completatulook %}
+    <div class="completa-tu-look">
+      <h3>Completa tu look</h3>
+      <div class="productos-relacionados">
+        {% for related_product in product.metafields.custom.completatulook.value %}
+          <div class="producto">
+            <a href="{{ related_product.url }}">
+              <img src="{{ related_product.featured_image | img_url: 'medium' }}" alt="{{ related_product.title }}">
+              <p>{{ related_product.title }}</p>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+  
+    <style>
+  
+    
+        .completa-tu-look {
+            /*text-align: center;*/
+            width: 100%;
+            margin-top: 20px;
+        }
+        .completa-tu-look h3{
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .productos-relacionados {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .producto {
+            text-align: center;
+            border: 0.8px solid #ddd;
+            width: 185px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+            
+        
+        .producto img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .producto p {
+            font-size: 11px;
+            color: #333;
+            font-weight:bold;
+        }
+  
+  
+    </style>
+
+
+    
+</body>
+</html>
