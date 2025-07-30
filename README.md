@@ -1,2 +1,2 @@
 # Funciones-Liquid
-Snippets Personalizados para Tienda Online en Shopify
+Snippets Personalizados, funciones y disenos completafos para tienda online en shopify
